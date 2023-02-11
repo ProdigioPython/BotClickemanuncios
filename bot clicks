@@ -1,0 +1,51 @@
+import pyautogui as bot
+from pynput import keyboard
+from selenium import webdriver
+
+# Inicializando o navegador
+options = webdriver.ChromeOptions()
+options.add_argument("--incognito")
+driver = webdriver.Chrome(chrome_options=options)
+
+seu_site = "https://ficandoricocompython.blogspot.com/"
+
+#clicar_anuncio = ' (x=739, y=307)'
+#Fechar_anuncio = ' (x=489, y=34 '
+#Atualizar_página = ' (x=110, y=68)'
+
+# Acessando o site
+driver.get(seu_site)
+
+def on_press(key):
+    if key == keyboard.Key.space:
+        listener.stop()
+        return False  
+
+
+#Loop infinito de 100 em 100 clicks. Atualiza a página clica no anúncio e repete isso infinitamente
+count = 0
+while True:
+    with keyboard.Listener(on_press=on_press) as listener:
+        while listener.running:
+            bot.click(x=739, y=307)
+            bot.sleep(2)
+            bot.click(x=489, y=34)
+            bot.sleep(2)
+            bot.click(x=110, y=68)
+            bot.sleep(2)
+            count += 1
+            if count == 100:
+                driver.close()
+                driver = webdriver.Chrome(chrome_options=options)
+                driver.get(seu_site)
+                count = 0
+                bot.click(x=739, y=307)
+                bot.sleep(2)
+                bot.click(x=489, y=34)
+                bot.sleep(2)
+                bot.click(x=110, y=68)
+                bot.sleep(2)
+                count += 1
+                
+    if not listener.running:
+        break
